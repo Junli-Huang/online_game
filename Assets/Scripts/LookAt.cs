@@ -10,6 +10,9 @@ public class LookAt : MonoBehaviour
 
     void Update()
     {
-        this.transform.LookAt(target);
+        if (target != null)
+        {
+            this.transform.LookAt(target);
+        }
     }
 }

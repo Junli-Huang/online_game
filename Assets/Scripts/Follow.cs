@@ -11,12 +11,29 @@ public class Follow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        offset = target.position - transform.position;
+        SetTarget(this.target);
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        transform.position = position;
+    }
+
+    public void SetTarget(Transform target)
+    {
+        this.target = target;
+        if (this.target != null)
+        {
+            this.offset = this.target.position - transform.position;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = target.position - offset;
+        if (target != null)
+        {
+            transform.position = target.position - offset;
+        }
     }
 }

@@ -106,9 +106,11 @@ GameObject:
   - component: {fileID: 2241136468136149947}
   - component: {fileID: 2241136468136149946}
   - component: {fileID: 2241136468136149895}
-  - component: {fileID: 926074298}
   - component: {fileID: 7904449690669213222}
-  - component: {fileID: 926074297}
+  - component: {fileID: 1436041069}
+  - component: {fileID: 1436041070}
+  - component: {fileID: 1436041071}
+  - component: {fileID: 1436041072}
   m_Layer: 0
   m_Name: Hero
   m_TagString: Untagged
@@ -207,20 +209,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!114 &926074298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2241136468136149944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b7a2871771590c448db70f541dd5a19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 15
-  rotateSpeed: 150
 --- !u!114 &7904449690669213222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec8356d81dd54a54c8afdc9c506e1334, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &926074297
+--- !u!114 &1436041069
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -242,10 +230,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 2241136468136149944}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba58695b1ebc371419c90d407c26410b, type: 3}
+  m_Script: {fileID: 11500000, guid: 934989df57bb4aa4ba13631984b05343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  socket: {fileID: 0}
+--- !u!114 &1436041070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2241136468136149944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f50f1f9a48ac4524f9999c3c6bb2770c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  socket: {fileID: 0}
+--- !u!114 &1436041071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2241136468136149944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47d51727b80d03e4ea5066df90c3b4ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 4493894533130461211, guid: 5bee51d06e15828498369f32314c1b61,
     type: 3}
   shootPoint: {fileID: 285909374311898934}
   bulletSpeed: 2000
+  socket: {fileID: 0}
+--- !u!114 &1436041072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2241136468136149944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afde25e0004bb8342b0604e867bd6e30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 15
+  rotateSpeed: 150
+  socket: {fileID: 0}

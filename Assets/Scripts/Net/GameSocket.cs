@@ -24,17 +24,27 @@ public class GameSocket : MonoBehaviour
 
     public class MessageID
     {
-        public const int Movement           =   10000;
-        public const int Movement_Translate =   10001;
-        public const int Movement_Rotate    =   10002;
+        public const int GameSystem                 =   10000;
+        public const int GameSystem_ShakeHand       =   10001;
+        public const int GameSystem_CreatePlayer    =   10002;
 
-        public const int Shoot              =   20000;
+        public const int Movement                   =   20000;
+        public const int Movement_Translate         =   20001;
+        public const int Movement_Rotate            =   20002;
+
+        public const int Shoot                      =   30000;
     }
 
     public void Connect()
     {
         InitSocket(); 
         StartReceiveThread();
+        Handshake();
+    }
+
+    private void Handshake()
+    {
+        SendData(MessageID.GameSystem + ":" + MessageID.GameSystem_ShakeHand+":");
     }
 
     private void InitSocket()
@@ -43,6 +53,14 @@ public class GameSocket : MonoBehaviour
         clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         IPEndPoint endPoint = new IPEndPoint(ip, port);
         clientSocket.Connect(endPoint);
+
+  
+
+        // Using the RemoteEndPoint property.
+        Debug.Log("I am connected to " + IPAddress.Parse(((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString()) + "on port number " + ((IPEndPoint)clientSocket.RemoteEndPoint).Port.ToString());
+
+        // Using the LocalEndPoint property.
+        Debug.Log("My local IpAddress is :" + IPAddress.Parse(((IPEndPoint)clientSocket.LocalEndPoint).Address.ToString()) + "I am connected on port number " + ((IPEndPoint)clientSocket.LocalEndPoint).Port.ToString());
     }
 
     void StartReceiveThread()
@@ -87,19 +105,6 @@ public class GameSocket : MonoBehaviour
         }
     }
 
-    public class Movement
-    {
-        public int type { get; }
-        public float value { get; }
-
-        public Movement(int type, float value)
-        {
-            this.type = type;
-            this.value = value;
-        }
-    }
-
-    public Queue<Movement> movements = new Queue<Movement>();
     public void ProcessMessage(string data)
     {
         //Debug.Log("接收消息为：" + data);
@@ -111,7 +116,6 @@ public class GameSocket : MonoBehaviour
         {
             messageQueue[id].MsgEnqueue(content);
         }
-        //movements.Enqueue(new Movement(type,value));
 
     }
 
@@ -123,26 +127,12 @@ public class GameSocket : MonoBehaviour
         
     }
 
-  
-
     public void SendData(string data)
     {
 
-
         int length = data.Length;
         length = length + (length + "").Length + 1;
-        //string strLen = length + "";
-        //switch (strLen.Length){
-        //    case 1:
-        //        strLen = "000" + strLen;
-        //        break;
-        //    case 2:
-        //        strLen = "00" + strLen;
-        //        break;
-        //    case 3:
-        //        strLen = "0" + strLen;
-        //        break;
-        //}
+
         data = length + ":" + data;
 
         if (clientSocket!=null)
