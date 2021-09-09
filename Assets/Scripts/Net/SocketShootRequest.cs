@@ -19,7 +19,7 @@ public class SocketShootRequest : MessageQueue
     {
         if (Input.GetButtonDown("Fire1") && inventory.stuff.bullets>0)
         {
-            socket.SendData(GameSocket.MessageID.Shoot+":0");
+            socket.SendData(GameSocket.MessageID.Shoot+"::");
         }
     }
 }

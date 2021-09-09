@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,31 +12,31 @@ public class SocketShootResponse : MessageQueue
     public float bulletSpeed = 10;
 
     public GameSocket socket;
-    //private MessageQueue messageHandle = new MessageQueue(GameSocket.MessageID.Shoot);
     void Start()
     {
         type = GameSocket.MessageID.Shoot;
+        inventory = GetComponent<Inventory>();
         socket.AddMessageHandle(this);
     }
     // Update is called once per frame
     void Update()
     {
 
-        while (socket.movements.Count > 0)
+        while (MsgCount() > 0)
         {
-            GameSocket.Movement movement = socket.movements.Peek();
+            MsgDequeue();
 
-            if (movement.type == (int)GameSocket.MessageID.Shoot)
-            {
-                socket.movements.Dequeue();
-
-                Rigidbody bulletInstance = Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
-                bulletInstance.AddForce(shootPoint.forward * bulletSpeed);
-                inventory.stuff.bullets--;
-
-
-                Destroy(bulletInstance.gameObject, 10f);
-            }
+            Shoot();
         }
+    }
+
+    private void Shoot()
+    {
+        Rigidbody bulletInstance = Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
+        bulletInstance.AddForce(shootPoint.forward * bulletSpeed);
+        inventory.stuff.bullets--;
+
+
+        Destroy(bulletInstance.gameObject, 10f);
     }
 }

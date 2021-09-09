@@ -6,19 +6,19 @@ using UnityEngine;
 public class MessageQueue : MonoBehaviour
 {
     public int type { set; get; }
-    public Queue<string> msgs = new Queue<string>();
+    private Queue<string> msgs = new Queue<string>();
 
 
-    internal void Enqueue(string content)
+    internal void MsgEnqueue(string content)
     {
         msgs.Enqueue(content);
     }
 
-    internal string Dequeue()
+    internal string MsgDequeue()
     {
         return msgs.Dequeue();
     }
-    internal int Count()
+    internal int MsgCount()
     {
         return msgs.Count;
     }

@@ -19,13 +19,12 @@ public class SocketMoveResponse : MessageQueue
 
     private void Update()
     {
-        while (msgs.Count > 0)
+        while (MsgCount() > 0)
         {
-            string data = msgs.Dequeue();
+            string data = MsgDequeue();
             int idx = data.IndexOf(":");
             int id = int.Parse(data.Substring(0, idx));
-            float value = float.Parse( data.Substring(idx + 1) );
-
+            float value = float.Parse(data.Substring(idx + 1));
 
             switch (id)
             {

@@ -13,7 +13,7 @@ public class GameSocket : MonoBehaviour
     bool connected;
 
     public string IP = "192.168.2.234";
-    public int port = 12223;
+    public int port = 12224;
 
     private Dictionary<int, MessageQueue> messageQueue = new Dictionary<int, MessageQueue>();
 
@@ -57,7 +57,7 @@ public class GameSocket : MonoBehaviour
                 int length = clientSocket.Receive(receive);  // length 接收字节数组长度
                 string data = Encoding.ASCII.GetString(receive);
 
-                CtrlData(data);
+                ReadData(data);
 
             }
             clientSocket.Close();
@@ -67,8 +67,9 @@ public class GameSocket : MonoBehaviour
         thread.Start();
     }
 
-    private void CtrlData(string data)
+    private void ReadData(string data)
     {
+        //Debug.Log(data);
         int sizeIndex = data.IndexOf(":");
 
         while (sizeIndex != -1)
@@ -77,7 +78,7 @@ public class GameSocket : MonoBehaviour
             string str = data.Substring(0, size);
 
             int messageIndex = str.IndexOf(":");
-            string message = data.Substring(messageIndex + 1);
+            string message = data.Substring(messageIndex + 1, size - messageIndex - 1);
             ProcessMessage(message);
 
             data = data.Substring(size);
@@ -101,14 +102,14 @@ public class GameSocket : MonoBehaviour
     public Queue<Movement> movements = new Queue<Movement>();
     public void ProcessMessage(string data)
     {
-        Debug.Log("接收消息为：" + data);
+        //Debug.Log("接收消息为：" + data);
         int idx = data.IndexOf(":");
 
         int id = int.Parse(data.Substring(0, idx));
         string content = data.Substring(idx + 1);
         if (messageQueue[id] != null)
         {
-            messageQueue[id].Enqueue(content);
+            messageQueue[id].MsgEnqueue(content);
         }
         //movements.Enqueue(new Movement(type,value));
 
@@ -128,21 +129,21 @@ public class GameSocket : MonoBehaviour
     {
 
 
-        int length = data.Length + 5;
-
-        string strLen = length + "";
-        switch (strLen.Length){
-            case 1:
-                strLen = "000" + strLen;
-                break;
-            case 2:
-                strLen = "00" + strLen;
-                break;
-            case 3:
-                strLen = "0" + strLen;
-                break;
-        }
-        data = strLen + ":" + data;
+        int length = data.Length;
+        length = length + (length + "").Length + 1;
+        //string strLen = length + "";
+        //switch (strLen.Length){
+        //    case 1:
+        //        strLen = "000" + strLen;
+        //        break;
+        //    case 2:
+        //        strLen = "00" + strLen;
+        //        break;
+        //    case 3:
+        //        strLen = "0" + strLen;
+        //        break;
+        //}
+        data = length + ":" + data;
 
         if (clientSocket!=null)
         {
