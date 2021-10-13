@@ -6,14 +6,17 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using UnityEngine;
+using Google.Protobuf;
 
 public class GameSocket : MonoBehaviour
 {
     Socket clientSocket;
     bool connected;
 
-    public string IP = "192.168.2.234";
-    public int port = 12224;
+    public UnityEngine.UI.InputField inputField;
+
+    public string IP = "192.168.110.234";
+    public int port = 12000;
 
     private Dictionary<int, MessageQueue> messageQueue = new Dictionary<int, MessageQueue>();
 
@@ -39,13 +42,13 @@ public class GameSocket : MonoBehaviour
     {
         InitSocket(); 
         StartReceiveThread();
-        Handshake();
+        //Handshake();
     }
 
-    private void Handshake()
-    {
-        SendData(MessageID.GameSystem + ":" + MessageID.GameSystem_ShakeHand+":");
-    }
+    //private void Handshake()
+    //{
+    //    SendData(MessageID.GameSystem + ":" + MessageID.GameSystem_ShakeHand+":");
+    //}
 
     private void InitSocket()
     {
@@ -73,9 +76,15 @@ public class GameSocket : MonoBehaviour
 
                 byte[] receive = new byte[1024];
                 int length = clientSocket.Receive(receive);  // length 接收字节数组长度
-                string data = Encoding.ASCII.GetString(receive);
+                //string data = Encoding.ASCII.GetString(receive);
 
-                ReadData(data);
+                int size = receive[0] * 256 + receive[1];
+                byte[] dataByte = new byte[size];
+                System.Array.Copy(receive, 2, dataByte, 0, size);
+
+
+                Item.Buy ret = Item.Buy.Parser.ParseFrom(dataByte);
+                Debug.Log(ret);
 
             }
             clientSocket.Close();
@@ -85,46 +94,80 @@ public class GameSocket : MonoBehaviour
         thread.Start();
     }
 
-    private void ReadData(string data)
-    {
-        //Debug.Log(data);
-        int sizeIndex = data.IndexOf(":");
+    //private void ReadData(string data)
+    //{
+    //    //Debug.Log(data);
+    //    int sizeIndex = data.IndexOf(":");
 
-        while (sizeIndex != -1)
-        {
-            int size = int.Parse(data.Substring(0, sizeIndex));
-            string str = data.Substring(0, size);
+    //    while (sizeIndex != -1)
+    //    {
+    //        int size = int.Parse(data.Substring(0, sizeIndex));
+    //        string str = data.Substring(0, size);
 
-            int messageIndex = str.IndexOf(":");
-            string message = data.Substring(messageIndex + 1, size - messageIndex - 1);
-            ProcessMessage(message);
+    //        int messageIndex = str.IndexOf(":");
+    //        string message = data.Substring(messageIndex + 1, size - messageIndex - 1);
+    //        ProcessMessage(message);
 
-            data = data.Substring(size);
+    //        data = data.Substring(size);
 
-            sizeIndex = data.IndexOf(":");
-        }
-    }
+    //        sizeIndex = data.IndexOf(":");
+    //    }
+    //}
 
-    public void ProcessMessage(string data)
-    {
-        //Debug.Log("接收消息为：" + data);
-        int idx = data.IndexOf(":");
+    //public void ProcessMessage(string data)
+    //{
+    //    //Debug.Log("接收消息为：" + data);
+    //    int idx = data.IndexOf(":");
 
-        int id = int.Parse(data.Substring(0, idx));
-        string content = data.Substring(idx + 1);
-        if (messageQueue[id] != null)
-        {
-            messageQueue[id].MsgEnqueue(content);
-        }
+    //    int id = int.Parse(data.Substring(0, idx));
+    //    string content = data.Substring(idx + 1);
+    //    if (messageQueue[id] != null)
+    //    {
+    //        messageQueue[id].MsgEnqueue(content);
+    //    }
 
-    }
+    //}
 
 
     public void OnCloseClick()
     {
         SendData("close");
         connected = false;
-        
+    }
+
+    public void TestSend()
+    {
+
+
+        Item.Use itemUse = new Item.Use
+        {
+            Id = 10,
+            Num = int.Parse(inputField.text)
+        };
+        byte[] byteArray = itemUse.ToByteArray();
+
+
+        Item.Use ret = Item.Use.Parser.ParseFrom(byteArray);
+        Debug.Log(ret);
+
+        SendData(byteArray);
+    }
+
+    void SendData(byte[] dataByte)
+    {
+
+        byte[] buff = new byte[dataByte.Length + 2];
+
+        buff[0] = (byte)((dataByte.Length >> 8) & 0xFF);
+        buff[1] = (byte)(dataByte.Length & 0xFF);
+
+
+        for (int i = 0; i < dataByte.Length; i++)
+        {
+            buff[i + 2] = dataByte[i];
+        }
+
+        clientSocket.Send(buff);
     }
 
     public void SendData(string data)

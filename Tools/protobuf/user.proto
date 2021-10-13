@@ -1,0 +1,50 @@
+syntax = "proto3";
+package User;
+
+
+// 代码风格
+// 消息名：使用骆驼风格的大小写命名，即单词首字母大写
+// 字段名：全部小写
+// 枚举名：使用骆驼风格的大小写命名
+// 枚举值：全部大写，使用下划线分隔
+
+message ChangedInfo{
+	string key = 1;
+	string type = 2;
+	string value = 3;
+}
+
+message UserInfo{
+	int64 uid = 1;
+	string nickname = 2;
+	int32 exp = 3;
+	bool unlocked_gem_slot_1 = 4;
+	bool unlocked_gem_slot_2 = 5;
+	bool unlocked_gem_slot_3 = 6;
+	bool unlocked_gem_slot_4 = 7;
+	bool unlocked_gem_slot_5 = 8;
+}
+
+message UserInfoReq {
+
+}
+
+message UserInfoRep {
+	int32 ret = 1;
+	UserInfo data = 2;
+}
+
+message UserInfoChangedPush {
+	repeated ChangedInfo changes = 1;
+}
+
+message UserStaminaChangePush {
+	int32 interval = 1;
+}
+
+message UserAllDataInitFinishReq {
+}
+
+message UserAddExp{
+	int32 exp = 1;
+}

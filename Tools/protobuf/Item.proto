@@ -1,0 +1,13 @@
+syntax = "proto3";
+package Item;
+
+
+message Use{
+	int32 id = 1;
+	int32 num = 2;
+}
+
+message Buy{
+	int32 id = 1;
+	int32 num = 2;
+}
