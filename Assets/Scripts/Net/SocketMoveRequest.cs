@@ -13,13 +13,13 @@ public class SocketMoveRequest : MonoBehaviour
         float forwardMovement = Input.GetAxis("Vertical");
         if (forwardMovement != 0)
         {
-            socket.SendData(GameSocket.MessageID.Movement + ":" + GameSocket.MessageID.Movement_Translate + ":" + forwardMovement);
+            socket.SendSocketData_(GameSocket.MessageID.Movement + ":" + GameSocket.MessageID.Movement_Translate + ":" + forwardMovement);
         }
 
         float turnMovement = Input.GetAxis("Horizontal");
         if (turnMovement != 0)
         {
-            socket.SendData(GameSocket.MessageID.Movement + ":" + GameSocket.MessageID.Movement_Rotate + ":" + turnMovement);
+            socket.SendSocketData_(GameSocket.MessageID.Movement + ":" + GameSocket.MessageID.Movement_Rotate + ":" + turnMovement);
         }
     }
 

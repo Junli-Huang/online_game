@@ -1,9 +1,0 @@
-syntax = "proto3";
-package test;
-
-
-message Person{
-	string p_age = 1;
-	int32 like = 2;
-	bool Happy = 3;
-}

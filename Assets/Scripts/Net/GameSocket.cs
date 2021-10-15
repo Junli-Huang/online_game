@@ -76,15 +76,12 @@ public class GameSocket : MonoBehaviour
 
                 byte[] receive = new byte[1024];
                 int length = clientSocket.Receive(receive);  // length 接收字节数组长度
-                //string data = Encoding.ASCII.GetString(receive);
 
                 int size = receive[0] * 256 + receive[1];
                 byte[] dataByte = new byte[size];
                 System.Array.Copy(receive, 2, dataByte, 0, size);
 
-
-                Item.Buy ret = Item.Buy.Parser.ParseFrom(dataByte);
-                Debug.Log(ret);
+                ReceiveSocketData(dataByte);
 
             }
             clientSocket.Close();
@@ -94,66 +91,55 @@ public class GameSocket : MonoBehaviour
         thread.Start();
     }
 
-    //private void ReadData(string data)
-    //{
-    //    //Debug.Log(data);
-    //    int sizeIndex = data.IndexOf(":");
-
-    //    while (sizeIndex != -1)
-    //    {
-    //        int size = int.Parse(data.Substring(0, sizeIndex));
-    //        string str = data.Substring(0, size);
-
-    //        int messageIndex = str.IndexOf(":");
-    //        string message = data.Substring(messageIndex + 1, size - messageIndex - 1);
-    //        ProcessMessage(message);
-
-    //        data = data.Substring(size);
-
-    //        sizeIndex = data.IndexOf(":");
-    //    }
-    //}
-
-    //public void ProcessMessage(string data)
-    //{
-    //    //Debug.Log("接收消息为：" + data);
-    //    int idx = data.IndexOf(":");
-
-    //    int id = int.Parse(data.Substring(0, idx));
-    //    string content = data.Substring(idx + 1);
-    //    if (messageQueue[id] != null)
-    //    {
-    //        messageQueue[id].MsgEnqueue(content);
-    //    }
-
-    //}
-
+    private void ReceiveSocketData(byte[] dataByte)
+    {
+        int msgid = dataByte[0] * 256 + dataByte[1];
+        byte[] msgByte = new byte[dataByte.Length - 2];
+        System.Array.Copy(dataByte, 2, msgByte, 0, msgByte.Length);
+        switch (msgid)
+        {
+            case 10001:
+                Item.Buy ret = Item.Buy.Parser.ParseFrom(msgByte);
+                Debug.Log(ret);
+                break;
+            default:
+                Debug.Log("???");
+                break;
+        }
+    }
 
     public void OnCloseClick()
     {
-        SendData("close");
+        SendSocketData_("close");
         connected = false;
     }
 
     public void TestSend()
     {
-
-
-        Item.Use itemUse = new Item.Use
+        SendMsg("Item.Use", new Item.Use
         {
             Id = 10,
             Num = int.Parse(inputField.text)
-        };
-        byte[] byteArray = itemUse.ToByteArray();
-
-
-        Item.Use ret = Item.Use.Parser.ParseFrom(byteArray);
-        Debug.Log(ret);
-
-        SendData(byteArray);
+        });
     }
 
-    void SendData(byte[] dataByte)
+    void SendMsg(string msgName, IMessage msg)
+    {
+        Debug.Log(msg);
+
+        byte[] msgByteArray = msg.ToByteArray();
+        byte[] dataArray = new byte[msgByteArray.Length + 2];
+
+        int protoID = MsgList.Protocol(msgName);
+
+        dataArray[0] = (byte)((protoID >> 8) & 0xFF);
+        dataArray[1] = (byte)(protoID & 0xFF);
+
+        System.Array.Copy(msgByteArray, 0, dataArray, 2, msgByteArray.Length);
+        SendSocketData(dataArray);
+    }
+
+    void SendSocketData(byte[] dataByte)
     {
 
         byte[] buff = new byte[dataByte.Length + 2];
@@ -161,16 +147,12 @@ public class GameSocket : MonoBehaviour
         buff[0] = (byte)((dataByte.Length >> 8) & 0xFF);
         buff[1] = (byte)(dataByte.Length & 0xFF);
 
-
-        for (int i = 0; i < dataByte.Length; i++)
-        {
-            buff[i + 2] = dataByte[i];
-        }
+        System.Array.Copy(dataByte, 0, buff, 2, dataByte.Length);
 
         clientSocket.Send(buff);
     }
 
-    public void SendData(string data)
+    public void SendSocketData_(string data)
     {
 
         int length = data.Length;

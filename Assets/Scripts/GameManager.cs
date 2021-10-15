@@ -31,7 +31,7 @@ public class GameManager : MessageQueue
             switch (id)
             {
                 case GameSocket.MessageID.GameSystem_ShakeHand:
-                    socket.SendData(GameSocket.MessageID.GameSystem + ":" + GameSocket.MessageID.GameSystem_CreatePlayer+":"+Random.Range(-50,50));
+                    socket.SendSocketData_(GameSocket.MessageID.GameSystem + ":" + GameSocket.MessageID.GameSystem_CreatePlayer+":"+Random.Range(-50,50));
                     break;
                 case GameSocket.MessageID.GameSystem_CreatePlayer:
 

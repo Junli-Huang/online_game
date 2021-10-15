@@ -25,12 +25,13 @@ namespace Item {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CgpJdGVtLnByb3RvEgRJdGVtIh4KA1VzZRIKCgJpZBgBIAEoBRILCgNudW0Y",
-            "AiABKAUiHgoDQnV5EgoKAmlkGAEgASgFEgsKA251bRgCIAEoBWIGcHJvdG8z"));
+            "AiABKAUiIAoDQnV5EgoKAmlkGAEgASgFEg0KBXByaWNlGAIgASgFYgZwcm90",
+            "bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Item.Use), global::Item.Use.Parser, new[]{ "Id", "Num" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Item.Buy), global::Item.Buy.Parser, new[]{ "Id", "Num" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Item.Buy), global::Item.Buy.Parser, new[]{ "Id", "Price" }, null, null, null, null)
           }));
     }
     #endregion
@@ -298,7 +299,7 @@ namespace Item {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public Buy(Buy other) : this() {
       id_ = other.id_;
-      num_ = other.num_;
+      price_ = other.price_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -320,15 +321,15 @@ namespace Item {
       }
     }
 
-    /// <summary>Field number for the "num" field.</summary>
-    public const int NumFieldNumber = 2;
-    private int num_;
+    /// <summary>Field number for the "price" field.</summary>
+    public const int PriceFieldNumber = 2;
+    private int price_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Num {
-      get { return num_; }
+    public int Price {
+      get { return price_; }
       set {
-        num_ = value;
+        price_ = value;
       }
     }
 
@@ -348,7 +349,7 @@ namespace Item {
         return true;
       }
       if (Id != other.Id) return false;
-      if (Num != other.Num) return false;
+      if (Price != other.Price) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -357,7 +358,7 @@ namespace Item {
     public override int GetHashCode() {
       int hash = 1;
       if (Id != 0) hash ^= Id.GetHashCode();
-      if (Num != 0) hash ^= Num.GetHashCode();
+      if (Price != 0) hash ^= Price.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -380,9 +381,9 @@ namespace Item {
         output.WriteRawTag(8);
         output.WriteInt32(Id);
       }
-      if (Num != 0) {
+      if (Price != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(Num);
+        output.WriteInt32(Price);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -398,9 +399,9 @@ namespace Item {
         output.WriteRawTag(8);
         output.WriteInt32(Id);
       }
-      if (Num != 0) {
+      if (Price != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(Num);
+        output.WriteInt32(Price);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -415,8 +416,8 @@ namespace Item {
       if (Id != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
       }
-      if (Num != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Num);
+      if (Price != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Price);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -433,8 +434,8 @@ namespace Item {
       if (other.Id != 0) {
         Id = other.Id;
       }
-      if (other.Num != 0) {
-        Num = other.Num;
+      if (other.Price != 0) {
+        Price = other.Price;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -456,7 +457,7 @@ namespace Item {
             break;
           }
           case 16: {
-            Num = input.ReadInt32();
+            Price = input.ReadInt32();
             break;
           }
         }
@@ -479,7 +480,7 @@ namespace Item {
             break;
           }
           case 16: {
-            Num = input.ReadInt32();
+            Price = input.ReadInt32();
             break;
           }
         }
